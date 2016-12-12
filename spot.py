@@ -1,41 +1,10 @@
-import win32gui
 import requests
 from bs4 import BeautifulSoup
 import time
 import io
 import subprocess as sp
 import re
-# https://github.com/XanderMJ/spotilib
-
-def getwindow(Title="SpotifyMainWindow"):
-	window_id = win32gui.FindWindow(Title, None)
-	return window_id
-	
-def song_info():
-	try:
-		song_info = win32gui.GetWindowText(getwindow())
-	except:
-		pass
-	return song_info
-
-def artist():
-	try:
-		temp = song_info()
-		artist, song = temp.split("-",1)
-		artist = artist.strip()
-		return artist
-	except:
-		return "There is noting playing at this moment"
-	
-def song():
-	try:
-		temp = song_info()
-		artist, song = temp.split("-",1)
-		song = song.strip()
-		return song
-	except:
-		return "There is noting playing at this moment"
-
+import spotilib
 
 def run(artist, song, proc):
 	if True:
@@ -57,13 +26,13 @@ sc = ''
 proc = None
 
 while True:
-	a = artist().replace(" ", "").lower()
+	a = spotilib.artist().replace(" ", "").lower()
 	re.sub('[^a-z]+$', '', a)
 	if a[:3] == "the":
 		a = a[3:]
 	if a[:5] == "touch" and a[6:10] == "amor":
 		a = "toucheamore"
-	s = song().replace(" ", "").lower()
+	s = spotilib.song().replace(" ", "").lower()
 	re.sub('[^a-z]+$', '', s)
 	if a != ac or s != sc:
 		ac, sc, proc = run(a, s, proc)
