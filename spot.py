@@ -5,6 +5,7 @@ import io
 import subprocess as sp
 import re
 import os
+from sys import platform
 import spotilib
 
 
@@ -59,7 +60,10 @@ def get_new_lyrics(artist, song, proc):
 		proc.kill()
 	if os.path.exists('lyrics.txt'):
 		print("Fetched successfully")
-		proc = sp.Popen(["notepad.exe", "lyrics.txt"])
+		if platform.startswith('linux'):
+			proc = sp.Popen(["gedit", "lyrics.txt"])
+		elif platform.startswith('win'):
+			proc = sp.Popen(["notepad.exe", "lyrics.txt"])
 	return artist, song, proc
 
 ac, sc = ('',)*2
